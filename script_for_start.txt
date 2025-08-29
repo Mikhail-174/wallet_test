@@ -1,0 +1,26 @@
+mkdir wallet_rest
+cd wallet_rest
+python3 -m venv env
+source env\Scripts\activate
+
+py -m pip install --upgrade pip
+
+установка postgreSQL
+создать БД и пользователя администратора
+установить пакет psycopg2 - связывает постгре и джанго
+подключить к проекту субд
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "wallet_db",
+        "USER": "wallet",
+        "PASSWORD": "1234",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
+python manage.py migrate
+если были данные, загрузить в таблицы данные из ранее сохранённых фикстур - python manage.py loaddata db.json
+
+создать суперпользователя
+mikhail 1234 mishadorofeich@gmail.com
