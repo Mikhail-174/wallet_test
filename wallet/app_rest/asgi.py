@@ -1,5 +1,5 @@
 """
-ASGI config for wallet project.
+ASGI config for app_rest project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wallet.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app_rest.settings')
 
 application = get_asgi_application()

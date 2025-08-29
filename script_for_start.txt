@@ -1,7 +1,7 @@
 mkdir wallet_rest
 cd wallet_rest
-python3 -m venv env
-source env\Scripts\activate
+py -m venv env
+.\env\Scripts\activate
 
 py -m pip install --upgrade pip
 
