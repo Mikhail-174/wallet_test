@@ -6,9 +6,9 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 """
 from django.contrib import admin
 from django.urls import path
-from .views import
+from .views import WalletView
 
 urlpatterns = [
-    path('<uuid:id>/operation/', ),
-    path('<uuid:id>/'),
+    path('<uuid:id>/', WalletView.as_view(), name='balance_check'),
+    path('<uuid:id>/operation/', WalletView.as_view(), name='operation'),
 ]
