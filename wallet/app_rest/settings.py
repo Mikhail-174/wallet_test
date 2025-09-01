@@ -79,8 +79,13 @@ WSGI_APPLICATION = 'app_rest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
+        "OPTIONS": {
+            "timeout": 20,
+        },
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+
+    },
+
 }
 
 

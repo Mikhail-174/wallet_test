@@ -36,3 +36,5 @@ ac242451-cf2e-437d-bda2-905825406b27 200.00
 f828c13e-a976-48ed-a0ec-3286c4eb4585 300.00
 7cab6001-74d7-4937-8b9b-b2f7da9060f8 400.00
 
+создание фикстур:
+python-Xutf8 manage.py dumpdata wallet.Wallet -o wallet/fixtures/wallet_wallet.json
