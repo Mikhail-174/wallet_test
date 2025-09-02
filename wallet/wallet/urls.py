@@ -7,8 +7,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import path
 
-from .views import AsyncWalletView              #async
-# from .views import WalletView
+from .views import AsyncWalletView, WalletView
 
 urlpatterns = [
     path('<uuid:id>/', AsyncWalletView.as_view(), name='balance_check'),                        #async
