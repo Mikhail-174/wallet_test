@@ -20,6 +20,16 @@ DATABASES = {
     }
 }
 python manage.py migrate
+
+если у данных был primary key - uuid, то у postgres не получится переделать id bigint в uuid, нужно выполнить следующие команды...
+
+ALTER TABLE wallet_wallet ADD COLUMN new_id UUID;
+UPDATE wallet_wallet SET new_id = gen_random_uuid();
+ALTER TABLE wallet_wallet DROP CONSTRAINT wallet_wallet_pkey CASCADE;
+ALTER TABLE wallet_wallet DROP COLUMN id;
+ALTER TABLE wallet_wallet RENAME COLUMN new_id TO id;
+ALTER TABLE wallet_wallet ADD PRIMARY KEY (id);
+
 если были данные, загрузить в таблицы данные из ранее сохранённых фикстур - python manage.py loaddata db.json
 
 создать суперпользователя
@@ -38,3 +48,8 @@ f828c13e-a976-48ed-a0ec-3286c4eb4585 300.00
 
 создание фикстур:
 python-Xutf8 manage.py dumpdata wallet.Wallet -o wallet/fixtures/wallet_wallet.json
+
+скачал uvicorn
+uvicorn app_rest.asgi:application --reload
+
+--reload: Автоматический перезапуск сервера при изменении кода (для разработки)
