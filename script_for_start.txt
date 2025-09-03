@@ -60,4 +60,4 @@ uvicorn app_rest.asgi:application --reload
 
 --reload: Автоматический перезапуск сервера при изменении кода (для разработки)
 
-https://docs.djangoproject.com/en/5.2/ref/models/querysets/#django.db.models.query.QuerySet.select_for_update  - очень полезная функция, 
+https://docs.djangoproject.com/en/5.2/ref/models/querysets/#django.db.models.query.QuerySet.select_for_update  - очень полезная функция,

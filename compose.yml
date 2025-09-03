@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:trixie
+    container_name: psgr
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - dbnet
+  wallet:
+    build: ./wallet
+    image: wallet_rest
+    container_name: wallet_rest
+    restart: always
+    command: "python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    links:
+      - "postgres:dbps"
+    networks:
+      - dbnet
+    volumes:
+      - ./wallet_rest:/app/www/wallet_rest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+networks:
+  dbnet:
+    driver: bridge
+
+volumes:
+  postgres-data:

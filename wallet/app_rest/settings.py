@@ -20,12 +20,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ppzjc1^pest61n=4v&x*piii#veb+1$obh-f9w7k0bfs2j@e&j'
+# SECRET_KEY = 'django-insecure-ppzjc1^pest61n=4v&x*piii#veb+1$obh-f9w7k0bfs2j@e&j'
+
+
+import os
+from os import environ
+
+
+SECRET_KEY = environ.get("DJANGO_SECRET_KEY")
+DEBUG = False
+ALLOWED_HOSTS = environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+DATABASES = {
+    'default': {
+        'ENGINE': "django.db.backends.postgresql",
+        'NAME': environ.get('DATABASE_NAME'), # 'sitewomen_db',
+        'USER': environ.get('DATABASE_USERNAME'), # 'sitewomen',
+        'PASSWORD': environ.get('DATABASE_PASSWORD'), # '1234',
+        'HOST': environ.get('DATABASE_HOST'), # 'localhost',
+        'PORT': environ.get('DATABASE_PORT'), # 5432,
+    }
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+
+
+
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -86,16 +111,16 @@ WSGI_APPLICATION = 'app_rest.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     },
 # }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "wallet_db",
-        "USER": "wallet",
-        "PASSWORD": "1234",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "wallet_db",
+#         "USER": "wallet",
+#         "PASSWORD": "1234",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 
 

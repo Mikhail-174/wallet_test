@@ -1,8 +1,13 @@
+adrf==0.1.9
 asgiref==3.9.1
+async-property==0.2.2
 attrs==25.3.0
-django==5.2.5
+click==8.2.2
+colorama==0.4.6
+django==5.2.6
 djangorestframework==3.16.1
 drf-spectacular==0.28.0
+h11==0.16.0
 inflection==0.5.1
 jsonschema==4.25.1
 jsonschema-specifications==2025.4.1
