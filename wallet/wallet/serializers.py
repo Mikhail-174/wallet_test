@@ -7,9 +7,6 @@ class WalletSerializer(serializers.ModelSerializer):
         model = Wallet
         fields = '__all__'
 
-
-
-
 # Асинхронный код
 from adrf.serializers import Serializer
 

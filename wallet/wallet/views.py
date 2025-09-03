@@ -2,12 +2,10 @@ from django.shortcuts import render
 from django.db import models
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Wallet
-import decimal
-
-
 from rest_framework.views import APIView
 from .serializers import WalletSerializer
+from .models import Wallet
+import decimal
 
 
 class WalletView(APIView):
@@ -20,7 +18,7 @@ class WalletView(APIView):
         except Wallet.DoesNotExist:
             return None
 
-    # detail = True / False: Указывает, нужно ли использовать идентификатор (PK) ресурса в URL. Но я как бы и так прописываю в urls, что по UUID строится маршрут... Так что detail=True/False не влияет
+    # обязательный detail = True/False: Указывает, нужно ли использовать идентификатор (PK) ресурса в URL.
     @action(methods=['post'], detail=False)
     def post(self, request, *args, **kwargs):
         from django.db import transaction
@@ -32,13 +30,16 @@ class WalletView(APIView):
 
             if operation.upper() not in ('WITHDRAW', 'DEPOSIT'):
                 return Response(data={"message": "No operation in request "}, status=400)
+
             if operation.upper()=='WITHDRAW':
                 if (wallet.account - amount) >= 0:
                     wallet.account -= amount
                 else:
                     return Response(data={"message": "insufficient funds"}, status=400)
+
             if operation.upper()=='DEPOSIT':
                 wallet.account += amount
+
             if not self.serializer_class(data={"account": wallet.account}).is_valid():
                 return Response(data={"message": "Bad data!"}, status=400)
             wallet.save()
@@ -47,31 +48,17 @@ class WalletView(APIView):
     @action(methods=['get'], detail=False)
     def get(self, request, *args, **kwargs):
         wallet = self.get_object(kwargs['id'])
+
         if wallet is None:
             return Response(data={"message": "Bad data!"}, status=400)
+
         serializer = self.serializer_class(wallet)
         return Response(data=serializer.data, status=200)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #async class
 from adrf.views import APIView
 from asgiref.sync import sync_to_async
 from .serializers import AsyncWalletSerializer
-
 
 class AsyncWalletView(APIView):
     serializer_class = AsyncWalletSerializer
@@ -86,29 +73,34 @@ class AsyncWalletView(APIView):
     async def post(self, request, *args, **kwargs):
         operation = request.data.get('operation_type')
         amount = decimal.Decimal(request.data.get('amount'))
-        wallet = await Wallet.objects.aget(kwargs['id'])
+        wallet = await Wallet.objects.aget(id=kwargs['id'])
+
         if wallet is None:
             return Response(data={"message": "Bad data!"}, status=400)
+
         if operation.upper() not in ('WITHDRAW', 'DEPOSIT'):
             return Response(data={"message": "No operation in request "}, status=400)
+
         if operation.upper()=='WITHDRAW':
-            if (wallet.account - amount) >= 0:
+            if (wallet.account >= amount):
                 wallet.account -= amount
             else:
                 return Response(data={"message": "insufficient funds"}, status=400)
+
         if operation.upper()=='DEPOSIT':
             wallet.account += amount
 
-        serializer = self.serializer_class(data={"account": wallet.account})                      #async
+        serializer = self.serializer_class(data={"account": wallet.account})
         if not serializer.is_valid():
             return Response(data={"message": "Bad data!"}, status=400)
 
-        await wallet.asave()                                                              #async
-        return Response(data={"message": "Balance has changed successfully!"}, status=200)
+        await wallet.asave()
+        serializer = self.serializer_class(wallet)
+        return Response(data=serializer.data, status=200)
 
 
-    async def get(self, request, *args, **kwargs):                                  #async
-        wallet = await self.get_object(kwargs['id'])                                #async
+    async def get(self, request, *args, **kwargs):
+        wallet = await self.get_object(kwargs['id'])
         if wallet is None:
             return Response(data={"message": "Bad data!"}, status=400)
         serializer = self.serializer_class(wallet)
