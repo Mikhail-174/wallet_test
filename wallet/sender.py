@@ -76,7 +76,7 @@ urls_for_concurrent = [
 def deposit(url):
     try:
         start_time = time.time()
-        response = requests.post(url, data={"amount": 100, "operation_type": "WITHDRAW"})
+        response = requests.post(url, data={"amount": 100, "operation_type": "DEPOSIT"})
         duration = time.time() - start_time
         print(f"Загружен {url[:52]}.. за {duration: .2f} сек. Статус: {response.status_code} ")
         print(response)
@@ -99,6 +99,40 @@ except requests.exceptions.ConnectionError:
     print("Ошибка подключения. Убедитесь, что сервер запущен на localhost:8000")
 except Exception as e:
     print(f"Произошла ошибка: {e}")
+
+
+def withdraw(url):
+    try:
+        start_time = time.time()
+        response = requests.post(url, data={"amount": 100, "operation_type": "WITHDRAW"})
+        duration = time.time() - start_time
+        print(f"Загружен {url[:52]}.. за {duration: .2f} сек. Статус: {response.status_code} ")
+        print(response)
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при загрузке {url}: {e}")
+
+# многопоточно
+threads = list()
+for url in urls_for_concurrent:
+    thread = threading.Thread(target=withdraw, args=(url,))
+    threads.append(thread)
+    thread.start()
+for thread in threads:
+    thread.join()
+
+try:
+    response = requests.get(f"http://localhost:8000/api/v1/wallets/{wallet_uuids[4]}")
+    print(f"Status Code: {response.status_code}. Response: {response.json()}")
+except requests.exceptions.ConnectionError:
+    print("Ошибка подключения. Убедитесь, что сервер запущен на localhost:8000")
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
+
+
+
+
+
+
 
 # по порядку
 # try:
