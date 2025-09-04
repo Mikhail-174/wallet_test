@@ -24,27 +24,29 @@ class WalletView(APIView):
         from django.db import transaction
 
         with transaction.atomic():
-            operation = request.data.get('operation_type')
-            amount = decimal.Decimal(request.data.get('amount'))
-            wallet =  Wallet.objects.select_for_update().get(id=kwargs['id'])
+            try:
+                operation = request.data.get('operation_type')
+                amount = decimal.Decimal(request.data.get('amount'))
+                wallet =  Wallet.objects.select_for_update().get(id=kwargs['id'])
 
-            if operation.upper() not in ('WITHDRAW', 'DEPOSIT'):
-                return Response(data={"message": "No operation in request "}, status=400)
+                if operation.upper() not in ('WITHDRAW', 'DEPOSIT'):
+                    return Response(data={"message": "No operation in request "}, status=400)
 
-            if operation.upper()=='WITHDRAW':
-                if (wallet.account - amount) >= 0:
-                    wallet.account -= amount
-                else:
-                    return Response(data={"message": "insufficient funds"}, status=400)
+                if operation.upper()=='WITHDRAW':
+                    if (wallet.account - amount) >= 0:
+                        wallet.account -= amount
+                    else:
+                        return Response(data={"message": "insufficient funds"}, status=400)
 
-            if operation.upper()=='DEPOSIT':
-                wallet.account += amount
+                if operation.upper()=='DEPOSIT':
+                    wallet.account += amount
 
-            if not self.serializer_class(data={"account": wallet.account}).is_valid():
+                if not self.serializer_class(data={"account": wallet.account}).is_valid():
+                    return Response(data={"message": "Bad data!"}, status=400)
+                wallet.save()
+                return Response(data={"message": "Balance has changed successfully!"}, status=200)
+            except Exception as e:
                 return Response(data={"message": "Bad data!"}, status=400)
-            wallet.save()
-            return Response(data={"message": "Balance has changed successfully!"}, status=200)
-
     @action(methods=['get'], detail=False)
     def get(self, request, *args, **kwargs):
         wallet = self.get_object(kwargs['id'])

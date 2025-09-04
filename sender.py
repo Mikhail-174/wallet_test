@@ -7,12 +7,13 @@ WALLET_UUID = "a058aaca-e0a7-4edf-8ea9-149dffe54ac6"
 url_get = f"http://localhost:8000/api/v1/wallets/{WALLET_UUID}"
 url_post = f"http://localhost:8000/api/v1/wallets/{WALLET_UUID}/operation"
 
-wallet_uuids = ["d15a7be2-a042-4968-9a78-259cae566076",
-            "59cfa93c-4bec-483a-872a-f7e2bf0fdc36",
-            "ed0802cf-056f-4d51-b5b9-791b95947743",
-            "602dd697-6e2b-4af9-a77c-e1c07fd4f84d",
-            "2ed5ef74-9066-4931-a86a-33579828e89d",
+wallet_uuids = ["2c0cea8c-7d88-4f5d-85a2-f1ab0c7de0f3",
+            "7cab6001-74d7-4937-8b9b-b2f7da9060f8",
+            "a058aaca-e0a7-4edf-8ea9-149dffe54ac6",
+            "ac242451-cf2e-437d-bda2-905825406b27",
+            "f828c13e-a976-48ed-a0ec-3286c4eb4585",
 ]
+
 urls_for_sync = [
     f"http://localhost:8000/api/v1/wallets/{wallet_uuids[0]}",
     f"http://localhost:8000/api/v1/wallets/{wallet_uuids[0]}",
