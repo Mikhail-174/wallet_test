@@ -1,12 +1,15 @@
 endpoints: 
-  http://127.0.0.1:8000/api/docs/
-  http://127.0.0.1:8000/api/<wallet_uuid>/
-  http://127.0.0.1:8000/api/<wallet_uuid>/operation/
+	
+ 	http://127.0.0.1:8000/api/docs/
+	
+	http://127.0.0.1:8000/api/<wallet_uuid>/
+ 
+ 	http://127.0.0.1:8000/api/<wallet_uuid>/operation/
 
 Для тестирования параллельных запросов использовать sender.py
-
-docker exec -it wallet sh
-python sender.py
+	
+ 	docker exec -it wallet sh
+ 	python sender.py
 
 
 SELECT * from wallet;
