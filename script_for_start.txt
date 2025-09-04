@@ -40,16 +40,8 @@ mikhail 1234 mishadorofeich@gmail.com
 https://drf-spectacular.readthedocs.io/en/latest/readme.html#installation:~:text=3.13%2C%203.14%2C%203.15)-,Installation,-%C2%B6
 
 
-d15a7be2-a042-4968-9a78-259cae566076 100.00
-59cfa93c-4bec-483a-872a-f7e2bf0fdc36 400.00
-ed0802cf-056f-4d51-b5b9-791b95947743 52.52
-602dd697-6e2b-4af9-a77c-e1c07fd4f84d 200.00
-2ed5ef74-9066-4931-a86a-33579828e89d 300.00
-2c0cea8c-7d88-4f5d-85a2-f1ab0c7de0f3 100.00
-7cab6001-74d7-4937-8b9b-b2f7da9060f8 400.00
-a058aaca-e0a7-4edf-8ea9-149dffe54ac6 52.52
-ac242451-cf2e-437d-bda2-905825406b27 200.00
-f828c13e-a976-48ed-a0ec-3286c4eb4585 300.00
+
+
 
 
 создание фикстур:
@@ -61,3 +53,25 @@ uvicorn app_rest.asgi:application --reload
 --reload: Автоматический перезапуск сервера при изменении кода (для разработки)
 
 https://docs.djangoproject.com/en/5.2/ref/models/querysets/#django.db.models.query.QuerySet.select_for_update  - очень полезная функция,
+
+
+docker exec -it psgr psql -U wallet wallet_db
+psql (17.6 (Debian 17.6-1.pgdg13+1))
+Type "help" for help.
+
+wallet_db=# select * from wallet;
+ERROR:  relation "wallet" does not exist
+LINE 1: select * from wallet;
+                      ^
+wallet_db=# select * from Wallet;
+ERROR:  relation "wallet" does not exist
+LINE 1: select * from Wallet;
+                      ^
+wallet_db=# select * from wallet_wallet;
+                  id                  | account
+--------------------------------------+---------
+ 2c0cea8c-7d88-4f5d-85a2-f1ab0c7de0f3 |  100.00
+ 7cab6001-74d7-4937-8b9b-b2f7da9060f8 |  400.00
+ a058aaca-e0a7-4edf-8ea9-149dffe54ac6 |   52.52
+ ac242451-cf2e-437d-bda2-905825406b27 |  200.00
+ f828c13e-a976-48ed-a0ec-3286c4eb4585 |  300.00

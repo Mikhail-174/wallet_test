@@ -12,10 +12,18 @@ services:
       - dbnet
   wallet:
     build: ./wallet
-    image: wallet_rest
-    container_name: wallet_rest
+    image: wallet
+    container_name: wallet
     restart: always
-    command: "python manage.py runserver 0.0.0.0:8000"
+    command:  >
+      sh -c "
+      echo 'Waiting for database...' &&
+      while ! nc -z dbps 5432; do sleep 0.1; done &&
+      echo 'Database started' &&
+      python manage.py migrate &&
+      python manage.py loaddata wallet_wallet.json &&
+      python manage.py runserver 0.0.0.0:8000
+      "
     env_file:
       - .env
     links:
@@ -23,7 +31,7 @@ services:
     networks:
       - dbnet
     volumes:
-      - ./wallet_rest:/app/www/wallet_rest
+      - ./wallet:/app/www/wallet_rest
     ports:
       - "8000:8000"
     depends_on:

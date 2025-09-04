@@ -25,16 +25,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
 from os import environ
+from dotenv import load_dotenv
+
+# Загружаем переменные из .env файла
+# env_path = BASE_DIR.parent / '.env'
+# load_dotenv(env_path)
+load_dotenv()
 
 
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY")
 DEBUG = False
-ALLOWED_HOSTS = environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
+# Безопасное получение ALLOWED_HOSTS
+allowed_hosts_str = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split()] if allowed_hosts_str else []
+
+# Если ALLOWED_HOSTS пустой, установите значения по умолчанию для разработки
+if not ALLOWED_HOSTS and DEBUG:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "::1"]
+
+
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
-        'NAME': environ.get('DATABASE_NAME'), # 'sitewomen_db',
-        'USER': environ.get('DATABASE_USERNAME'), # 'sitewomen',
+        'NAME': environ.get('DATABASE_NAME'), # 'wallet_db',
+        'USER': environ.get('DATABASE_USERNAME'), # 'wallet',
         'PASSWORD': environ.get('DATABASE_PASSWORD'), # '1234',
         'HOST': environ.get('DATABASE_HOST'), # 'localhost',
         'PORT': environ.get('DATABASE_PORT'), # 5432,
